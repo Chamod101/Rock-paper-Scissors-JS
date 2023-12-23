@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/rock-paper-scissors.css">
+  <title>Document</title>
+</head>
+<body>
+  <div class="mainContainer">
+
+    <div class="title"><h2>Rock Paper Scissors</h2></div>
+
+    <div class="btnContainer">
+  
+  
+      <button onclick="answer('rock')">
+        <img src="res/rock-emoji.png" alt="">
+      </button>
+  
+      <button onclick="answer('paper')">
+        <img src="res/paper-emoji.png" alt="">
+      </button>
+  
+      <button onclick="answer('scissors')">
+        <img src="res/scissors-emoji.png" alt="">
+      </button>
+          
+    </div>
+    
+
+    <div class="scoreSection">
+      <p class="wining"></p>
+      <p class="moves"></p>
+      <p class="score"></p>
+    </div>
+
+    <button onclick="
+      score.wins=0;
+      score.losses=0;
+      score.ties=0;
+      localStorage.removeItem('score');
+      updateScore();
+
+      document.querySelector('.moves').innerHTML=``
+
+      document.querySelector('.wining').innerHTML=``
+
+      " class="resetbtn">
+        Reset
+      </button>
+
+    
+
+  </div>
+
+  <script>
+
+    
+
+    let score=JSON.parse(localStorage.getItem('score')) || {
+        wins:0,
+        losses:0,
+        ties:0
+      }
+
+      updateScore()
+
+    function pickComputerAnswer(){
+      let computer = '';
+      
+      const randomNumber = Math.random();
+        if(randomNumber >=0 && randomNumber <(1/3)){
+          computer = 'Rock';
+        }else if(randomNumber >=(1/3) && randomNumber <2/3 ){
+          computer = 'Paper';
+        }else{
+          computer = 'Scissors'
+        };
+        return computer;
+    };
+
+
+    function answer(usersAnswer){
+      let msg = '';
+
+      const computer = pickComputerAnswer();
+
+        if(usersAnswer === 'scissors'){
+            if(computer === 'Rock'){
+            msg = 'Computer wins.';
+          }else if(computer === 'Paper'){
+            msg = 'You win.';
+          }else{
+            msg = 'Tie';
+          }
+          display();
+        }
+
+        else if(usersAnswer==='paper'){
+            if(computer === 'Rock'){
+            msg = 'You win.';
+          }else if(computer === 'Paper'){
+            msg = 'Tie';
+          }else{
+            msg = 'Computer wins.';
+          }
+          display();
+        }
+
+        else if(usersAnswer==='rock'){
+            if(computer === 'Rock'){
+            msg = 'Tie';
+          }else if(computer === 'Paper'){
+            msg = 'Computer wins.';
+          }else{
+            msg = 'You win.';;
+          }
+          display();
+        }
+
+        function display(){
+
+          if(msg === 'You win.'){
+            score.wins++;
+          }
+          else if(msg === 'Computer wins.'){
+            score.losses++;
+          }
+          else{
+            score.ties++;
+          }
+
+          localStorage.setItem('score',JSON.stringify(score));
+
+          
+          updateScore();
+
+          
+          document.querySelector('.moves').innerHTML=`You <img src="res/${usersAnswer}-emoji.png">. Computer <img src="res/${computer}-emoji.png">`;
+
+          console.log(`${usersAnswer},${computer}`)
+
+          document.querySelector('.wining').innerHTML=`${msg}.`
+        }
+      
+    }
+
+
+    function updateScore(){
+      document.querySelector('.score').innerHTML=`Wins : ${score.wins} | Losses : ${score.losses} | Ties : ${score.ties}`;
+     
+    }
+
+    
+
+  </script>
+  
+</body>
+</html>
